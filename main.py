@@ -140,4 +140,5 @@ plt.show()
 
 st.pyplot(fig)
 
+# https://startup-profit-prediction-ml.streamlit.app/
 
