@@ -17,10 +17,10 @@ st.write("""
 """)
 
 
-# from PIL import Image
-# image = Image.open('startup.png')
+from PIL import Image
+image = Image.open('startup.png')
 
-# st.image(image)
+st.image(image)
 
 
 df = pd.read_csv("1000_Companies.csv")
@@ -114,6 +114,7 @@ if option == "Banglore":
 if option == "Delhi":
     optn = 2   
 
+total_value = rnd_cost+Administration_cost+Marketing_cost_Spend
 y_pred = rf_regressor.predict([[Marketing_cost_Spend,Administration_cost,rnd_cost,optn]])
 
 if st.button('Predict'):
@@ -129,16 +130,45 @@ x_value = [rnd_cost+Administration_cost+Marketing_cost_Spend]
   
 X_axis = np.arange(len(X))
   
-plt.bar(X_axis - 0.2, x_value, 0.4, label = 'cost')
-plt.bar(X_axis + 0.2, y_pred, 0.4, label = 'profit')
+# plt.bar(X_axis - 0.2, x_value, 0.4, label = 'cost')
+# plt.bar(X_axis + 0.2, y_pred, 0.4, label = 'profit')
   
-plt.xticks(X_axis, X)
-plt.xlabel("RS")
-plt.title("Profit vs Toal cost spend")
+# plt.xticks(X_axis, X)
+# plt.xlabel("RS")
+# plt.title("Profit vs Toal cost spend")
+# plt.legend()
+# plt.show()
+
+# st.pyplot(fig)
+
+
+
+fig, ax = plt.subplots()
+bars1 = ax.bar(X_axis - 0.2, x_value, 0.4, label='cost')
+bars2 = ax.bar(X_axis + 0.2, y_pred, 0.4, label='profit')
+
+# Add value labels to each bar
+ax.bar_label(bars1, padding=3, fmt='%.2f')  # for cost bars
+ax.bar_label(bars2, padding=3, fmt='%.2f')  # for profit bars
+
+ax.set_xlabel('Dollars')
+ax.set_ylabel('Value')
+ax.set_title('Profit vs Toal cost spend')
+ax.legend()
+plt.show()
+st.pyplot(fig)
+
+
+plt.bar(X_axis, x_value, width=0.4, label='cost')
+plt.bar(X_axis, y_pred, width=0.4, bottom=x_value, label='profit')
+plt.xlabel('Dollars')
+plt.ylabel('Value')
 plt.legend()
+plt.title('Stacked Bar Chart: Cost + Profit')
 plt.show()
 
 st.pyplot(fig)
 
-# https://startup-profit-prediction-ml.streamlit.app/
-
+if total_value!=0:
+    percent_change = ((y_pred - total_value) / total_value) * 100
+    st.write(f"percentage in change {float(percent_change):.2f}%")
